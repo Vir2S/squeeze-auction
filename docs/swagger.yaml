@@ -1,0 +1,152 @@
+definitions:
+  errors.Error:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    type: object
+  models.Item:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      initialPrice:
+        minimum: 0
+        type: integer
+      soldPrice:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+info:
+  contact: {}
+paths:
+  /items/:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all available items.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of items
+          schema:
+            items:
+              $ref: '#/definitions/models.Item'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/errors.Error'
+      summary: Get Items List
+      tags:
+      - Items
+    post:
+      consumes:
+      - application/json
+      description: Creates a new item based on the provided request body.
+      parameters:
+      - description: Item details
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.Item'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Item created successfully
+          schema:
+            $ref: '#/definitions/models.Item'
+        "400":
+          description: 'Bad Request: Failed to parse request body or validation failed'
+          schema:
+            $ref: '#/definitions/errors.Error'
+      summary: Create Item
+      tags:
+      - Items
+  /items/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an item by its ID.
+      parameters:
+      - description: ID of the item to delete
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: Item deleted successfully
+        "400":
+          description: 'Bad Request: Invalid ID'
+          schema:
+            $ref: '#/definitions/errors.Error'
+      summary: Delete Item
+      tags:
+      - Items
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the details of an item by its ID.
+      parameters:
+      - description: ID of the item to retrieve
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item retrieved successfully
+          schema:
+            $ref: '#/definitions/models.Item'
+        "404":
+          description: Item not found
+          schema:
+            $ref: '#/definitions/errors.Error'
+      summary: Get Item
+      tags:
+      - Items
+    put:
+      consumes:
+      - application/json
+      description: Updates the details of an item based on the provided request body
+        and item ID.
+      parameters:
+      - description: ID of the item to update
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated item details
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/models.Item'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Item updated successfully
+          schema:
+            $ref: '#/definitions/models.Item'
+        "400":
+          description: 'Bad Request: Failed to parse request body or validation failed'
+          schema:
+            $ref: '#/definitions/errors.Error'
+      summary: Update Item
+      tags:
+      - Items
+swagger: "2.0"
