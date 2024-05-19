@@ -7,3 +7,5 @@
     make run - to start locally
 
     make dc-run - to start in docker container
+
+    make dc-stop - to stop and down docker container
